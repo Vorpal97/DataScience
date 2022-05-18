@@ -116,3 +116,6 @@ fabric.properties
 .DS_store
 
 /Python/.idea/
+*.xml
+*.iml
+*.pyc
