@@ -4,6 +4,7 @@ from matplotlib.patches import ConnectionPatch
 import numpy as np
 import etl
 
+#istogrammi con conteggio
 def count_one_mode(df, campo, x_label, y_label, title, save_path ="", mostra = False):
     s = df[campo].value_counts()
 
@@ -25,6 +26,7 @@ def count_one_mode(df, campo, x_label, y_label, title, save_path ="", mostra = F
     if mostra is True:
         plt.show()
 
+#torta con barra
 def bar_of_pie(param_pie, param_bar):
     # make figure and assign axis objects
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 5))
@@ -45,7 +47,7 @@ def bar_of_pie(param_pie, param_bar):
     bottom = 0
     ratios = param_bar["ratios"]
     width = .2
-    colors = ["blue", "red", "yellow"]
+    colors = ["royalblue", "cornflowerblue", "lightsteelblue"]
 
     for j in range(len(ratios)):
         height = ratios[j]
