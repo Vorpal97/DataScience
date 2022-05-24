@@ -26,6 +26,7 @@ def count_one_mode(df, campo, x_label, y_label, title, save_path ="", mostra = F
     if mostra is True:
         plt.show()
 
+
 #torta con barra
 def bar_of_pie(param_pie, param_bar):
     # make figure and assign axis objects
@@ -88,3 +89,34 @@ def bar_of_pie(param_pie, param_bar):
 
     plt.show()
 
+#instogramma conteggio in orizzontale
+def inverted_count(df, campo, x_label, y_label, title, save_path):
+    np.random.seed(19680801)
+
+    s = df[campo].value_counts()
+
+    dict = s.to_dict()
+
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+
+    x = list(dict.keys())
+    y_pos = np.arange(len(x))
+    y = list(dict.values())
+
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+
+    error = np.random.rand(len(x))
+
+    ax.barh(y_pos, y, xerr=error, align='center')
+    ax.set_yticks(y_pos, labels=x)
+    ax.invert_yaxis()  # labels read top-to-bottom
+    plt.suptitle(title, fontsize=20)
+    plt.xlabel(x_label, fontsize=15)
+    plt.ylabel(y_label, fontsize=16)
+    if save_path != "":
+        plt.savefig(save_path, dpi = 356, bbox_inches = 'tight')
+        print("grafico salvato in " + save_path)
+
+    plt.show()
