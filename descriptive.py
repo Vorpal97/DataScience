@@ -4,8 +4,9 @@ from matplotlib.patches import ConnectionPatch
 import numpy as np
 import etl
 
-#istogrammi con conteggio
-def count_one_mode(df, campo, x_label, y_label, title, save_path ="", mostra = False):
+
+# istogrammi con conteggio
+def count_one_mode(df, campo, x_label, y_label, title, save_path="", mostra=False):
     s = df[campo].value_counts()
 
     dict = s.to_dict()
@@ -20,14 +21,14 @@ def count_one_mode(df, campo, x_label, y_label, title, save_path ="", mostra = F
     plt.xlabel(x_label, fontsize=15)
     plt.ylabel(y_label, fontsize=16)
     if save_path != "":
-        plt.savefig(save_path, dpi = 356, bbox_inches = 'tight')
+        plt.savefig(save_path, dpi=356, bbox_inches='tight')
         print("grafico salvato in " + save_path)
 
     if mostra is True:
         plt.show()
 
 
-#torta con barra
+# tort con barra
 def bar_of_pie(param_pie, param_bar):
     # make figure and assign axis objects
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 5))
@@ -89,16 +90,12 @@ def bar_of_pie(param_pie, param_bar):
 
     plt.show()
 
-#instogramma conteggio in orizzontale
-def inverted_count(df, campo, x_label, y_label, title, save_path):
-    np.random.seed(19680801)
 
+# instogramma conteggio in orizzontale
+def inverted_count(df, campo, x_label, y_label, title, save_path):
     s = df[campo].value_counts()
 
     dict = s.to_dict()
-
-    plt.rcdefaults()
-    fig, ax = plt.subplots()
 
     x = list(dict.keys())
     y_pos = np.arange(len(x))
@@ -116,7 +113,7 @@ def inverted_count(df, campo, x_label, y_label, title, save_path):
     plt.xlabel(x_label, fontsize=15)
     plt.ylabel(y_label, fontsize=16)
     if save_path != "":
-        plt.savefig(save_path, dpi = 356, bbox_inches = 'tight')
+        plt.savefig(save_path, dpi=356, bbox_inches='tight')
         print("grafico salvato in " + save_path)
 
     plt.show()
