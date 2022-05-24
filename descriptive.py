@@ -29,7 +29,7 @@ def count_one_mode(df, campo, x_label, y_label, title, save_path="", mostra=Fals
 
 
 # tort con barra
-def bar_of_pie(param_pie, param_bar, save_path):
+def bar_of_pie(param_pie, param_bar, title, save_path):
     # make figure and assign axis objects
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 5))
     fig.subplots_adjust(wspace=0)
@@ -88,6 +88,7 @@ def bar_of_pie(param_pie, param_bar, save_path):
     ax2.add_artist(con)
     con.set_linewidth(4)
 
+    plt.suptitle(title, fontsize=20)
     plt.savefig(save_path, dpi=356, bbox_inches='tight')
     print("grafico salvato in " + save_path)
 
@@ -110,7 +111,7 @@ def inverted_count(df, campo, x_label, y_label, title, save_path):
     error = np.random.rand(len(x))
 
     ax.barh(y_pos, y, xerr=error, align='center')
-    #ax.set_yticks(y_pos, labels=x)
+    ax.set_yticks(y_pos, labels=x)
     ax.invert_yaxis()  # labels read top-to-bottom
     plt.suptitle(title, fontsize=20)
     plt.xlabel(x_label, fontsize=15)

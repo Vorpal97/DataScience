@@ -3,9 +3,9 @@ import etl
 
 df = etl.importa()
 
-descriptive.count_one_mode(df, "type_1", "Tipo", "Conteggio", "Conteggi per tipo", "./grafici/grafico1.png")
-descriptive.count_one_mode(df, "generation", "Generazione", "Conteggio", "Conteggio per generazione", "./grafici/grafico2.png")
-descriptive.count_one_mode(df, "status", "Status", "Conteggio", "status", "./grafici/grafico3.png")
+descriptive.count_one_mode(df, "type_1", "Tipo", "Conteggio", "Conteggi per tipo", "./grafici/grafico1.png", True)
+descriptive.count_one_mode(df, "generation", "Generazione", "Conteggio", "Conteggio per generazione", "./grafici/grafico2.png", True)
+descriptive.count_one_mode(df, "status", "Status", "Conteggio", "status", "./grafici/grafico3.png", True)
 descriptive.inverted_count(df, "egg_type_1", "Conteggio", "Egg Type", "Conteggio per Egg Type", "./grafici/grafico4.png")
 
 s = df["status"].value_counts()
@@ -43,4 +43,4 @@ param_bar = {
     "ratios" : bar_percentage
 }
 
-descriptive.bar_of_pie(param_pie, param_bar, "./grafici/grafico5.png")
+descriptive.bar_of_pie(param_pie, param_bar, 'Percentuali tipologia' , "./grafici/grafico5.png")

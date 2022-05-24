@@ -8,7 +8,5 @@ def importa():
     df = df.drop(columns = to_drop_list)
     return(df)
 
-def test():
-    print('Dio maiale')
 
 
