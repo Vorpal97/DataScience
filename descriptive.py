@@ -29,7 +29,7 @@ def count_one_mode(df, campo, x_label, y_label, title, save_path="", mostra=Fals
 
 
 # tort con barra
-def bar_of_pie(param_pie, param_bar):
+def bar_of_pie(param_pie, param_bar, save_path):
     # make figure and assign axis objects
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 5))
     fig.subplots_adjust(wspace=0)
@@ -87,6 +87,9 @@ def bar_of_pie(param_pie, param_bar):
     con.set_color([0, 0, 0])
     ax2.add_artist(con)
     con.set_linewidth(4)
+
+    plt.savefig(save_path, dpi=356, bbox_inches='tight')
+    print("grafico salvato in " + save_path)
 
     plt.show()
 

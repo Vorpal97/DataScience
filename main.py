@@ -43,4 +43,4 @@ param_bar = {
     "ratios" : bar_percentage
 }
 
-descriptive.bar_of_pie(param_pie, param_bar)
+descriptive.bar_of_pie(param_pie, param_bar, "./grafici/grafico5.png")
