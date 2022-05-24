@@ -3,10 +3,10 @@ import etl
 
 df = etl.importa()
 
-#descriptive.count_one_mode(df, "type_1", "Tipo", "Conteggio", "Conteggi per tipo", "/Users/Manuel/Desktop/grafico1.png")
-#descriptive.count_one_mode(df, "generation", "Generazione", "Conteggio", "Conteggio per generazione", "/Users/Manuel/Desktop/grafico2.png")
-#descriptive.count_one_mode(df, "status", "Status", "Conteggio", "status", "/Users/Manuel/Desktop/grafico3.png")
-descriptive.inverted_count(df, "egg_type_1", "Conteggio", "Egg Type", "Conteggio per Egg Type", "/Users/simonecappella/Desktop/grafico4.png")
+descriptive.count_one_mode(df, "type_1", "Tipo", "Conteggio", "Conteggi per tipo", "./grafici/grafico1.png")
+descriptive.count_one_mode(df, "generation", "Generazione", "Conteggio", "Conteggio per generazione", "./grafici/grafico2.png")
+descriptive.count_one_mode(df, "status", "Status", "Conteggio", "status", "./grafici/grafico3.png")
+descriptive.inverted_count(df, "egg_type_1", "Conteggio", "Egg Type", "Conteggio per Egg Type", "./grafici/grafico4.png")
 
 s = df["status"].value_counts()
 dict = s.to_dict()

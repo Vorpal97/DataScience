@@ -107,7 +107,7 @@ def inverted_count(df, campo, x_label, y_label, title, save_path):
     error = np.random.rand(len(x))
 
     ax.barh(y_pos, y, xerr=error, align='center')
-    ax.set_yticks(y_pos, labels=x)
+    #ax.set_yticks(y_pos, labels=x)
     ax.invert_yaxis()  # labels read top-to-bottom
     plt.suptitle(title, fontsize=20)
     plt.xlabel(x_label, fontsize=15)
