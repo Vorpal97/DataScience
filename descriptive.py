@@ -30,6 +30,18 @@ def count_one_mode(df, campo, x_label, y_label, title, save_path="", mostra=Fals
         plt.show()
 
 
+def count_kernel(df, campo, color, save_path = "",  mostra = False):
+    sb.distplot(df[campo], color=color)
+    plt.axvline(df[campo].mean(), color='red')
+    mean_value = 'Il valore medio per ' + str(campo) + ' è: ' + str(df[campo].mean())
+    if save_path != "":
+        plt.savefig(save_path, dpi=356, bbox_inches='tight')
+        print("grafico salvato in " + save_path)
+    if mostra is True:
+        plt.show()
+    return mean_value
+
+
 # tort con barra
 def bar_of_pie(param_pie, param_bar, title, save_path):
     # make figure and assign axis objects
