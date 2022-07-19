@@ -3,7 +3,7 @@ import pandas as pd
 from matplotlib.patches import ConnectionPatch
 from matplotlib.collections import EllipseCollection
 import numpy as np
-import seaborn as sb
+import seaborn as sns
 
 
 
@@ -31,7 +31,7 @@ def count_one_mode(df, campo, x_label, y_label, title, save_path="", mostra=Fals
 
 
 def count_kernel(df, campo, color, save_path = "",  mostra = False):
-    sb.distplot(df[campo], color=color)
+    sns.distplot(df[campo], color=color)
     plt.axvline(df[campo].mean(), color='red')
     mean_value = 'Il valore medio per ' + str(campo) + ' è: ' + str(df[campo].mean())
     if save_path != "":
@@ -184,10 +184,33 @@ def pears_corr_plot(data, title, save_path):
 
 def pears_corr_wvalues(data, title, save_path):
     pearsoncorr = data.corr(method='pearson')
-    sb.heatmap(pearsoncorr, xticklabels=pearsoncorr.columns, yticklabels=pearsoncorr.columns,
+    sns.heatmap(pearsoncorr, xticklabels=pearsoncorr.columns, yticklabels=pearsoncorr.columns,
                cmap='RdBu_r', annot=True, linewidth=0.5)
     if save_path != '':
         plt.savefig(save_path, dpi=356, bbox_inches='tight')
         print("grafico salvato in " + save_path)
     plt.suptitle(title, fontsize=20)
+    plt.show()
+
+def heatmap(data, title):
+    plt.clf()
+    plt.figure(figsize=(15, 8))
+    sns.heatmap(data.corr(), cmap='Blues', annot=True, annot_kws={"fontsize": 16})
+    plt.title(title, fontsize=20)
+    plt.savefig('./grafici/heatmap_' + title)
+    plt.show()
+
+def pairplot(data, title):
+    plt.clf()
+    sns.pairplot(data)
+    plt.savefig('./grafici/pairplot_' + title)
+    plt.show()
+
+def comparison_graph(data, based_on, attribute, treshold, title):
+    plt.clf()
+    plt.figure(figsize=(18, 7))
+    sns.distplot(data.loc[data[based_on] > treshold][attribute], kde=False)
+    sns.distplot(data.loc[data[based_on] < treshold][attribute], kde=False)
+    plt.title(title, fontsize=20)
+    plt.savefig('./grafici/comparison_' + attribute + '_by_' + based_on)
     plt.show()
