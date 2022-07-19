@@ -108,8 +108,8 @@ data = np.nan_to_num(data)
 #metodo per capire il numero di cluster con cui inizializzare il kmeans
 clustering.elbow_method(data)
 clustering.kmeans_clustering(data, 3, 'kmeans_attack_&_total_points', x, y, 'Pokémon base', 'Pokémon forti/leggendari', 'Pokémon medio livello')
+clustering.silhouette_kmeans(data, 3, 'Silhouette_KMeans_Atk&TotPoints')
 
-####
 
 x = 'total_points'
 y = 'base_experience'
@@ -120,6 +120,7 @@ data = data[~np.isnan(data).any(axis=1)]
 #metodo per capire il numero di cluster con cui inizializzare il kmeans
 #clustering.elbow_method(data)
 clustering.kmeans_clustering(data, 5, 'kmeans_baseExperience_&_total_points', x, y, 'Normali da livellare', 'Molto facili da livellare', 'Difficili da livellare', 'Facili da livellare', 'Molto difficili da livellare')
+clustering.silhouette_kmeans(data, 5, 'Silhouette_KMeans_Exp&TotPoints')
 
 
 ####
@@ -132,6 +133,7 @@ data = data[~np.isnan(data).any(axis=1)]
 #metodo per capire il numero di cluster con cui inizializzare il kmeans
 #clustering.elbow_method(data)
 clustering.kmeans_clustering(data, 5, 'kmeans_catchRate_&_total_points', x, y, 'Difficili da catturare', 'Normali da catturare', 'Molto difficili da catturare', 'Deboli e molto facili da catturare', 'Deboli e normali da catturare')
+clustering.silhouette_kmeans(data, 5, 'Silhouette_KMeans_catch&TotPoints')
 with open(folder + '/kmeans_catchRate_&_total_points_note.txt', 'w') as f:
     f.write('Notare come ci sono dei Pokémon difficilissimi da catturare (3%) con total points variabili e pokemon facilissimi da catturare con total points variabili. ')
 

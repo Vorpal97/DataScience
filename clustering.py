@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 from sklearn.cluster import DBSCAN, KMeans
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import StandardScaler
+from yellowbrick.cluster import SilhouetteVisualizer
 import pandas as pd
 from sklearn.decomposition import PCA
 
@@ -99,3 +100,16 @@ def pca(data):
     pca = PCA(n_components=2, svd_solver='auto').fit(data)
     pca_x = pca.transform(data)
     return pca_x
+
+
+def silhouette_kmeans(data, n, title):
+    model = KMeans(n, random_state=42)
+    visualizer = SilhouetteVisualizer(model, colors='yellowbrick')
+
+    plt.clf()
+    plt.figure(figsize=(15, 8))
+    plt.title(title)
+    visualizer.fit(data)
+    plt.savefig('./grafici/' + title, dpi=356, bbox_inches='tight')
+    visualizer.show()
+
