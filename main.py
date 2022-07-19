@@ -11,7 +11,7 @@ if not os.path.exists(folder):
 df = etl.importa()
 
 ####DESCRIPTIVE####
-'''
+
 #Primi grafici descrittivi, tutti conteggi
 mean1 = descriptive.count_kernel(df, 'weight_kg', 'blue', "./grafici/kernel_peso.png", mostra = True)
 mean2 = descriptive.count_kernel(df, 'hp', 'green', "./grafici/kernel_hp.png", mostra = True)
@@ -23,14 +23,14 @@ with open(folder + '/means.txt', 'w') as f:
     for elem in means:
         f.write(elem + '\n')
 
-'''
+
 '''
 #descriptive.count_one_mode(df, "generation", "Generazione", "Conteggio", "Conteggio per generazione", "./grafici/per_generazione.png", True)
 descriptive.count_one_mode(df, "type_1", "Tipo", "Conteggio", "Conteggi per tipo", "./grafici/per_tipo.png", False)
 descriptive.count_one_mode(df, "status", "Status", "Conteggio", "status", "./grafici/per_status.png", False)
 descriptive.inverted_count(df, "egg_type_1", "Conteggio", "Egg Type", "Conteggio per Egg Type", "./grafici/per_uovo.png")
 '''
-'''
+
 
 #Calcola parametri per torta
 s = df["status"].value_counts()
@@ -97,12 +97,64 @@ descriptive.comparison_graph(df,'percentage_male', 'attack',50, 'attack by male 
 descriptive.comparison_graph(df,'percentage_male', 'defense',50,'defense by male gender probability')
 descriptive.comparison_graph(df,'percentage_male', 'hp',50,'hp by male gender probability')
 descriptive.comparison_graph(df,'percentage_male', 'total_points',50, 'total points by male gender probability')
-'''
+
 ####CLUSTERING####
+####KMEANS####
 
-
-data = df.iloc[:, [df.columns.get_loc('total_points'), df.columns.get_loc('attack')]].values
+x = 'total_points'
+y = 'attack'
+data = df.iloc[:, [df.columns.get_loc(x), df.columns.get_loc(y)]].values
 data = np.nan_to_num(data)
 #metodo per capire il numero di cluster con cui inizializzare il kmeans
 clustering.elbow_method(data)
-clustering.kmean_clustering(data, 3, 'kmeans_attack_&_total_points')
+clustering.kmeans_clustering(data, 3, 'kmeans_attack_&_total_points', x, y, 'Pokémon base', 'Pokémon forti/leggendari', 'Pokémon medio livello')
+
+####
+
+x = 'total_points'
+y = 'base_experience'
+data = df.iloc[:, [df.columns.get_loc(x), df.columns.get_loc(y)]].values
+#to remove rows with nan elements
+data = data[~np.isnan(data).any(axis=1)]
+#data = np.nan_to_num(data)
+#metodo per capire il numero di cluster con cui inizializzare il kmeans
+#clustering.elbow_method(data)
+clustering.kmeans_clustering(data, 5, 'kmeans_baseExperience_&_total_points', x, y, 'Normali da livellare', 'Molto facili da livellare', 'Difficili da livellare', 'Facili da livellare', 'Molto difficili da livellare')
+
+
+####
+x = 'total_points'
+y = 'catch_rate'
+data = df.iloc[:, [df.columns.get_loc(x), df.columns.get_loc(y)]].values
+#to remove rows with nan elements
+data = data[~np.isnan(data).any(axis=1)]
+#data = np.nan_to_num(data)
+#metodo per capire il numero di cluster con cui inizializzare il kmeans
+#clustering.elbow_method(data)
+clustering.kmeans_clustering(data, 5, 'kmeans_catchRate_&_total_points', x, y, 'Difficili da catturare', 'Normali da catturare', 'Molto difficili da catturare', 'Deboli e molto facili da catturare', 'Deboli e normali da catturare')
+with open(folder + '/kmeans_catchRate_&_total_points_note.txt', 'w') as f:
+    f.write('Notare come ci sono dei Pokémon difficilissimi da catturare (3%) con total points variabili e pokemon facilissimi da catturare con total points variabili. ')
+
+####DBSCAN####
+
+#PER CALCOLARE EPSILON USO IL K-NEAREST NEIGHBORS
+x = 'total_points'
+y = 'attack'
+data = df.iloc[:, [df.columns.get_loc(x), df.columns.get_loc(y)]].values
+data = np.nan_to_num(data)
+#KNN
+#clustering.nn(data)
+
+clustering.dbscan(data, 'dbscan_attack_&_totalPoints', x, y)
+
+####DBSCAN with PCA, 5 features####
+x = 'total_points'
+y = 'attack'
+z = 'defense'
+k = 'sp_attack'
+y = 'sp_defense'
+data = df.iloc[:, [df.columns.get_loc(x), df.columns.get_loc(y), df.columns.get_loc(z), df.columns.get_loc(k), df.columns.get_loc(y)]].values
+data = data[~np.isnan(data).any(axis=1)]
+
+data = clustering.pca(data)
+clustering.dbscan(data, 'db_scan_5_features_PCA')
