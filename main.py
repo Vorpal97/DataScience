@@ -8,7 +8,7 @@ import numpy as np
 folder = './grafici'
 if not os.path.exists(folder):
     os.mkdir(folder)
-df = etl.importa()
+df = etl.importa('./dataset/pokedex_21.csv')
 
 ####DESCRIPTIVE####
 
