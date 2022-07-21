@@ -13,6 +13,7 @@ def create_crypto_dict(df, coins):
     df_list = {}
     for elem in coins:
         df_list[elem] = (df.loc[df['Coin'] == elem])
+        df_list[elem] = df_list[elem].set_index('Date')
     return df_list
 
 
@@ -26,6 +27,12 @@ def filter_columns(df, to_keep):
     for elem in to_keep:
         df2[elem] = df[elem]
     return df2
+
+
+def add_avg_column(df, coins_to_keep):
+    for elem in coins_to_keep:
+        df[elem]['Avg'] = (df[elem]['High'] + df[elem]['Low'])/2
+    return df
 
 
 
