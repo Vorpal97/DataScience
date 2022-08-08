@@ -4,6 +4,7 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from statsmodels.tsa.stattools import  adfuller
 from statsmodels.tsa.arima.model import ARIMA,ARIMAResults
+from statsmodels.tsa.forecasting.theta import ThetaModelResults as teta
 from numpy import log
 
 
@@ -34,12 +35,12 @@ def differentiation(df, coin, feature):
     plot_acf(df[coin][feature].dropna(), ax=axes[0, 1])
 
     # 1st diff
-    axes[1, 0].plot(df[coin][feature].diff());
+    axes[1, 0].plot(df[coin].tail()[feature].diff());
     axes[1, 0].set_title('1st Order Differencing')
     plot_acf(df[coin][feature].diff().dropna(), ax=axes[1, 1])
 
     # 2nd diff
-    axes[2, 0].plot(df[coin][feature].diff());
+    axes[2, 0].plot(df[coin].tail()[feature].diff());
     axes[2, 0].set_title('2nd Order Differencing')
     plot_acf(df[coin][feature].diff().dropna(), ax=axes[2, 1])
     axes[0,1].set(xlim=(0,20))
@@ -51,7 +52,7 @@ def calcolo_ar(df, coin, feature):
     plt.rcParams.update({'figure.figsize': (9, 3), 'figure.dpi': 120})
     plt.clf()
     fig, axes = plt.subplots(1,2, sharex=False)
-    axes[0].plot(df[coin][feature].diff())
+    axes[0].plot(df[coin].tail(600)[feature].diff())
     axes[0].set_title('1st Differencing')
     axes[1].set(ylim=(0, 5))
     axes[1].set(xlim=(0, 20))
@@ -61,7 +62,7 @@ def calcolo_ar(df, coin, feature):
 
 
 def sarimax(df, coin, feature):
-    model = ARIMA(df[coin][feature], order=(1,1,0))
+    model = ARIMA(df[coin].tail(600)[feature], order=(1,1,0))
     model_fit = model.fit()
     print(model_fit.summary())
     with open('grafici_tsa' + '/arima.txt', 'w') as f:
@@ -82,8 +83,8 @@ def residui(model):
 
 def prediction_check(model):
     plt.clf()
-    #plt.plot(model.predict(dynamic=False))
     plt.plot(model.predict(dynamic=False))
+    #plt.plot(model.predict(dynamic=False))
     plt.title('Predict Vs Actual')
     plt.show()
 
@@ -92,7 +93,7 @@ def fc(train, test):
     model = SARIMAX(train, order=(1,1,0))
     fitted = model.fit()
 
-    fc, se, conf = fitted.forecast(15, alpha=0.05)
+    fc = fitted.forecast(15)
     fc_series = pd.Series(fc, index=test.index)
     lower_series = pd.Series(conf[:, 0], index=test.index)
     upper_series = pd.Series(conf[:, 1], index=test.index)

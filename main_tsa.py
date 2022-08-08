@@ -28,8 +28,11 @@ tsa.adickeyfuller(df_list, 'ethereum', 'Close')
 tsa.adickeyfuller(df_list, 'dogecoin', 'Close')
 tsa.adickeyfuller(df_list, 'solana', 'Close')
 
+print(df_list['bitcoin'].tail(600)['Close'])
+
+
 # differenziazione della serie per calcolare parametro d
-# tsa.differentiation(df_list, 'bitcoin', 'Close')
+tsa.differentiation(df_list, 'bitcoin', 'Close')
 tsa.calcolo_ar(df_list, 'bitcoin', 'Close') #dal grafico sembrava necessario scegliere come ma
 # il valore 1, andando a vedere i risultati di ARIMA, è stato necessario toglierlo per ottenere
 # un modello migliore
@@ -40,8 +43,8 @@ tsa.calcolo_ar(df_list, 'bitcoin', 'Close') #dal grafico sembrava necessario sce
 model_fit = tsa.sarimax(df_list, 'bitcoin', 'Close')
 
 # plot dei residui
-residuals = tsa.residui(model_fit)
-tsa.prediction_check(model_fit)
+#residuals = tsa.residui(model_fit)
+#tsa.prediction_check(model_fit)
 
 train = df_list['bitcoin']['Close'][:85]
 test = df_list['bitcoin']['Close'][85:]

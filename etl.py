@@ -13,6 +13,7 @@ def create_crypto_dict(df, coins):
     df_list = {}
     for elem in coins:
         df_list[elem] = (df.loc[df['Coin'] == elem])
+        #df_list[elem].reset_index(drop=True)
         df_list[elem] = df_list[elem].set_index('Date')
     return df_list
 
