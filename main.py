@@ -3,7 +3,6 @@ import seaborn as sns
 import descriptive
 import classification
 import etl
-import etl_classification
 import clustering
 import os
 import numpy as np
@@ -11,10 +10,10 @@ folder = './grafici'
 if not os.path.exists(folder):
     os.mkdir(folder)
 df = etl.importa('./dataset/pokedex_21.csv')
-dff = etl_classification.importa('./dataset/pokedex_21.csv')
+dff = etl.importa_clf('./dataset/pokedex_21.csv')
 
 ####DESCRIPTIVE####
-
+"""
 #Primi grafici descrittivi, tutti conteggi
 mean1 = descriptive.count_kernel(df, 'weight_kg', 'blue', "./grafici/kernel_peso.png", mostra = True)
 mean2 = descriptive.count_kernel(df, 'hp', 'green', "./grafici/kernel_hp.png", mostra = True)
@@ -163,6 +162,6 @@ data = data[~np.isnan(data).any(axis=1)]
 
 data = clustering.pca(data)
 clustering.dbscan(data, 'db_scan_5_features_PCA')
-
+"""
 ###CLASSIFICAZIONE
 classification.classification(dff)
