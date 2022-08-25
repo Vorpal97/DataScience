@@ -1,69 +1,98 @@
+import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from sklearn.metrics import mean_squared_log_error
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from statsmodels.tsa.stattools import  adfuller
+<<<<<<< Updated upstream
 from statsmodels.tsa.arima.model import ARIMA,ARIMAResults
 from statsmodels.tsa.forecasting.theta import ThetaModelResults as teta
 from numpy import log
+=======
+import matplotlib.dates as mdates
+from statsmodels.tsa.stattools import acf
+>>>>>>> Stashed changes
 
-
-def basic_tsa(df_list, coin, feature, ylabel):
+def basic_tsa(df, feature, ylabel):
     plt.clf()
-    data = df_list[coin][feature]
+    data = df[feature]
     data.plot(figsize=(15, 5))
     plt.ylabel(ylabel)
-    plt.title(coin + ' - ' + feature + ' Value')
+    plt.title(ylabel + ' by ' + feature)
     plt.show()
 
 
-def adickeyfuller(df_list, coin, feature):
-    result = adfuller(df_list[coin][feature].dropna())
-    print (coin + '-' + feature + ' ADF Statistic: %f' % result[0])
-    print(coin + '-' + feature + ' p-value: %f' % result[1])
+def adickeyfuller(df):
+    result = adfuller(df.values)
+    print ('ADF Statistic: %f' % result[0])
+    print('p-value: %f' % result[1])
 
 
-def differentiation(df, coin, feature):
+def differentiation(df, feature):
     plt.rcParams.update({'figure.figsize': (9, 7), 'figure.dpi': 120})
     plt.clf()
-    fig, axes = plt.subplots(3,2, sharex=True)
+    fig, axes = plt.subplots(3,2, sharex=False)
 
     # axes[0,1].set_xlim([0,20])
     # original
-    axes[0, 0].plot(df[coin][feature]);
+    axes[0, 0].plot(df[feature]);
     axes[0, 0].set_title('Original Series')
-    plot_acf(df[coin][feature].dropna(), ax=axes[0, 1])
+    plot_acf(df[feature], ax=axes[0, 1])
 
     # 1st diff
+<<<<<<< Updated upstream
     axes[1, 0].plot(df[coin].tail()[feature].diff());
+=======
+    axes[1, 0].plot(df[feature].diff());
+>>>>>>> Stashed changes
     axes[1, 0].set_title('1st Order Differencing')
-    plot_acf(df[coin][feature].diff().dropna(), ax=axes[1, 1])
+    plot_acf(df[feature].diff().dropna(), ax=axes[1, 1])
 
     # 2nd diff
+<<<<<<< Updated upstream
     axes[2, 0].plot(df[coin].tail()[feature].diff());
+=======
+    axes[2, 0].plot(df[feature].diff().diff());
+>>>>>>> Stashed changes
     axes[2, 0].set_title('2nd Order Differencing')
-    plot_acf(df[coin][feature].diff().dropna(), ax=axes[2, 1])
-    axes[0,1].set(xlim=(0,20))
+    plot_acf(df[feature].diff().diff().dropna(), ax=axes[2, 1])
+
+    axes[0, 1].get_xaxis().set_visible(False)
+    axes[1, 1].get_xaxis().set_visible(False)
+    axes[0, 0].get_xaxis().set_visible(False)
+    axes[1, 0].get_xaxis().set_visible(False)
+
+
     plt.savefig('./grafici_tsa/diff')
     plt.show()
 
 
-def calcolo_ar(df, coin, feature):
+def calcolo_ar(df, feature):
     plt.rcParams.update({'figure.figsize': (9, 3), 'figure.dpi': 120})
     plt.clf()
     fig, axes = plt.subplots(1,2, sharex=False)
+<<<<<<< Updated upstream
     axes[0].plot(df[coin].tail(600)[feature].diff())
+=======
+    axes[0].plot(df[feature].diff())
+>>>>>>> Stashed changes
     axes[0].set_title('1st Differencing')
-    axes[1].set(ylim=(0, 5))
-    axes[1].set(xlim=(0, 20))
-    plot_pacf(df[coin][feature].diff().dropna(), ax=axes[1])
+    plot_pacf(df[feature].diff().dropna(), ax=axes[1])
     plt.savefig('./grafici_tsa/pacf')
     plt.show()
 
 
+<<<<<<< Updated upstream
 def sarimax(df, coin, feature):
     model = ARIMA(df[coin].tail(600)[feature], order=(1,1,0))
     model_fit = model.fit()
+=======
+def arima(df, feature):
+    model = ARIMA(df[feature], order=(0,1,0))
+    model_fit = model.fit(disp=0)
+>>>>>>> Stashed changes
     print(model_fit.summary())
     with open('grafici_tsa' + '/arima.txt', 'w') as f:
         f.write(str(model_fit.summary()))
@@ -76,7 +105,6 @@ def residui(model):
     fig, ax = plt.subplots(1, 2)
     residuals.plot(title='Residuals', ax=ax[0])
     residuals.plot(kind='kde', title='Density', ax=ax[1])
-    ax[1].set(xlim=(-500, 500))
     plt.savefig('./grafici_tsa/residui')
     plt.show()
 
@@ -90,10 +118,15 @@ def prediction_check(model):
 
 
 def fc(train, test):
-    model = SARIMAX(train, order=(1,1,0))
-    fitted = model.fit()
+    model = ARIMA(train, order=(0,1,0))
+    fitted = model.fit(disp=-1)
 
+    fc, se, conf = fitted.forecast(6, alpha=0.05) #95% conf
+
+<<<<<<< Updated upstream
     fc = fitted.forecast(15)
+=======
+>>>>>>> Stashed changes
     fc_series = pd.Series(fc, index=test.index)
     lower_series = pd.Series(conf[:, 0], index=test.index)
     upper_series = pd.Series(conf[:, 1], index=test.index)
@@ -107,6 +140,51 @@ def fc(train, test):
     plt.title('Forecast vs Actuals')
     plt.legend(loc='upper left', fontsize=8)
     plt.show()
+
+def RMSLE(y_true, y_pred):
+    MSLE = mean_squared_log_error(y_true, y_pred)
+    return np.sqrt(MSLE)
+
+def sarimax(train, test):
+    model = SARIMAX(train, order=(0,1,0), seasonal_order=(2,1,1,7))
+    fit = model.fit()
+    y_pred = fit.forecast(6)
+    errors = []
+    err = RMSLE(test, y_pred)
+    errors.append(err)
+    fig, ax = plt.subplots(figsize=(16, 3))
+    years = mdates.YearLocator()
+    for name, dat, c in zip(['train', 'test', 'pred'], [train, test, y_pred], ['b', 'g', 'r']):
+        ax.plot(dat, c=c, label=name)
+    ax.xaxis.set_major_locator(years)
+    plt.legend()
+    plt.grid()
+    plt.show()
+    return y_pred, test
+
+
+def actualvsfitted(model):
+    plt.clf()
+    model.plot_predict(dynamic=False)
+    plt.show()
+
+
+def forecast_accuracy(forecast, actual):
+    mape = np.mean(np.abs(forecast - actual)/np.abs(actual))
+    me = np.mean(forecast - actual)
+    mae = np.mean(np.abs(forecast - actual))
+    mpe = np.mean ((forecast - actual)/actual)
+    rmse = np.mean((forecast - actual)**2)**.5
+    corr = np.corrcoef(forecast, actual)[0, 1]
+    mins = np.amin(np.hstack([forecast[:,None],
+                              actual[:,None]]), axis=1)
+    maxs = np.amax(np.hstack([forecast[:,None],
+                              actual[:,None]]), axis=1)
+    minmax = 1-np.mean(mins/maxs)
+    acf1 = acf(forecast - actual)[1]
+    return({'mape': mape, 'me': me, 'mae': mae,
+            'mpe': mpe, 'rmse': rmse, 'acf1': acf1,
+            'corr': corr, 'minmax': minmax})
 
 
 

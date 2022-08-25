@@ -9,6 +9,7 @@ def importa(dataset):
     return(df)
 
 
+<<<<<<< Updated upstream
 def importa_clf(dataset):
     df = pd.read_csv(dataset)
     df.drop(df.columns[df.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
@@ -32,10 +33,21 @@ def create_crypto_dict(df, coins):
         #df_list[elem].reset_index(drop=True)
         df_list[elem] = df_list[elem].set_index('Date')
     return df_list
+=======
+def create_list(data, keep, param):
+    df = pd.DataFrame()
+    #data['Date'] = pd.to_datetime(data['Date'])
+    #data = data.set_index('Date')
+    data = data.set_index('Year')
+    data.index = pd.to_datetime(data.index, format='%Y')
+    df = data.loc[data['Entity'] == keep]
+    df = df[[param]]
+    return df
+>>>>>>> Stashed changes
 
 
 def importa_tsa(dataset):
-    df = pd.read_csv(dataset, index_col=None)
+    df = pd.read_csv(dataset, sep=';', index_col=None)
     return(df)
 
 
