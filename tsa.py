@@ -3,17 +3,11 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.metrics import mean_squared_log_error
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from statsmodels.tsa.stattools import  adfuller
-<<<<<<< Updated upstream
-from statsmodels.tsa.arima.model import ARIMA,ARIMAResults
-from statsmodels.tsa.forecasting.theta import ThetaModelResults as teta
-from numpy import log
-=======
+from statsmodels.tsa.arima_model import ARIMA
 import matplotlib.dates as mdates
 from statsmodels.tsa.stattools import acf
->>>>>>> Stashed changes
 
 def basic_tsa(df, feature, ylabel):
     plt.clf()
@@ -42,23 +36,14 @@ def differentiation(df, feature):
     plot_acf(df[feature], ax=axes[0, 1])
 
     # 1st diff
-<<<<<<< Updated upstream
-    axes[1, 0].plot(df[coin].tail()[feature].diff());
-=======
     axes[1, 0].plot(df[feature].diff());
->>>>>>> Stashed changes
     axes[1, 0].set_title('1st Order Differencing')
     plot_acf(df[feature].diff().dropna(), ax=axes[1, 1])
 
     # 2nd diff
-<<<<<<< Updated upstream
-    axes[2, 0].plot(df[coin].tail()[feature].diff());
-=======
     axes[2, 0].plot(df[feature].diff().diff());
->>>>>>> Stashed changes
     axes[2, 0].set_title('2nd Order Differencing')
     plot_acf(df[feature].diff().diff().dropna(), ax=axes[2, 1])
-
     axes[0, 1].get_xaxis().set_visible(False)
     axes[1, 1].get_xaxis().set_visible(False)
     axes[0, 0].get_xaxis().set_visible(False)
@@ -73,26 +58,15 @@ def calcolo_ar(df, feature):
     plt.rcParams.update({'figure.figsize': (9, 3), 'figure.dpi': 120})
     plt.clf()
     fig, axes = plt.subplots(1,2, sharex=False)
-<<<<<<< Updated upstream
-    axes[0].plot(df[coin].tail(600)[feature].diff())
-=======
     axes[0].plot(df[feature].diff())
->>>>>>> Stashed changes
     axes[0].set_title('1st Differencing')
     plot_pacf(df[feature].diff().dropna(), ax=axes[1])
     plt.savefig('./grafici_tsa/pacf')
     plt.show()
 
-
-<<<<<<< Updated upstream
-def sarimax(df, coin, feature):
-    model = ARIMA(df[coin].tail(600)[feature], order=(1,1,0))
-    model_fit = model.fit()
-=======
 def arima(df, feature):
     model = ARIMA(df[feature], order=(0,1,0))
     model_fit = model.fit(disp=0)
->>>>>>> Stashed changes
     print(model_fit.summary())
     with open('grafici_tsa' + '/arima.txt', 'w') as f:
         f.write(str(model_fit.summary()))
@@ -122,11 +96,6 @@ def fc(train, test):
     fitted = model.fit(disp=-1)
 
     fc, se, conf = fitted.forecast(6, alpha=0.05) #95% conf
-
-<<<<<<< Updated upstream
-    fc = fitted.forecast(15)
-=======
->>>>>>> Stashed changes
     fc_series = pd.Series(fc, index=test.index)
     lower_series = pd.Series(conf[:, 0], index=test.index)
     upper_series = pd.Series(conf[:, 1], index=test.index)
@@ -182,9 +151,12 @@ def forecast_accuracy(forecast, actual):
                               actual[:,None]]), axis=1)
     minmax = 1-np.mean(mins/maxs)
     acf1 = acf(forecast - actual)[1]
-    return({'mape': mape, 'me': me, 'mae': mae,
+    results = {'mape': mape, 'me': me, 'mae': mae,
             'mpe': mpe, 'rmse': rmse, 'acf1': acf1,
-            'corr': corr, 'minmax': minmax})
+            'corr': corr, 'minmax': minmax}
+    with open('grafici_tsa' + '/arima.txt', 'w') as f:
+        f.write(str(results))
+    return results
 
 
 

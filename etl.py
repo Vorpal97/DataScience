@@ -24,16 +24,6 @@ def importa_clf(dataset):
     df = df.drop(columns = to_drop_list)
     return(df)
 
-
-def create_crypto_dict(df, coins):
-    df_list = {}
-    for elem in coins:
-        df_list[elem] = (df.loc[df['Coin'] == elem])
-        #df_list[elem].reset_index(drop=True)
-        df_list[elem] = df_list[elem].set_index('Date')
-    return df_list
-
-
 def create_list(data, keep, param):
     df = pd.DataFrame()
     #data['Date'] = pd.to_datetime(data['Date'])
